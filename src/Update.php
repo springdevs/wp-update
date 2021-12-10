@@ -29,25 +29,16 @@ class Update
 	private $slug;
 
 	/**
-	 * License Key 
-	 * @var string
-	 */
-	private $license_key;
-
-	/**
 	 * Initialize a new instance of the WordPress Auto-Update class
 	 * @param string $current_version
 	 * @param string $update_path
 	 * @param string $plugin_slug
 	 */
-	public function __construct($current_version, $update_path, $plugin_slug, $license_key = '')
+	public function __construct($current_version, $update_path, $plugin_slug)
 	{
 		// Set the class public variables
 		$this->current_version = $current_version;
 		$this->update_path = $update_path;
-
-		// Set the License
-		$this->license_key = $license_key;
 
 		// Set the Plugin Slug	
 		$this->plugin_slug = $plugin_slug;
@@ -116,7 +107,6 @@ class Update
 		$params = array(
 			'body' => array(
 				'action' => 'version',
-				'license_key' => $this->license_key,
 			),
 		);
 		$request = wp_remote_post($this->update_path, $params);
@@ -135,7 +125,6 @@ class Update
 		$params = array(
 			'body' => array(
 				'action' => 'info',
-				'license_key' => $this->license_key,
 			),
 		);
 		$request = wp_remote_post($this->update_path, $params);
