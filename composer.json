@@ -1,7 +1,7 @@
 {
 	"name": "springdevs/wp-update",
 	"type": "library",
-	"description": "Create your own self-hosted WordPress Plugin repository for pushing updates.",
+	"description": "A minimal helper to update wordpress plugin from your own self-hosted WordPress Plugin repository.",
 	"keywords": [
 		"wordpress",
 		"auto-update",
