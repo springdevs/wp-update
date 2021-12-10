@@ -29,12 +29,6 @@ class Update
 	private $slug;
 
 	/**
-	 * License User
-	 * @var string
-	 */
-	private $license_user;
-
-	/**
 	 * License Key 
 	 * @var string
 	 */
@@ -46,14 +40,13 @@ class Update
 	 * @param string $update_path
 	 * @param string $plugin_slug
 	 */
-	public function __construct($current_version, $update_path, $plugin_slug, $license_user = '', $license_key = '')
+	public function __construct($current_version, $update_path, $plugin_slug, $license_key = '')
 	{
 		// Set the class public variables
 		$this->current_version = $current_version;
 		$this->update_path = $update_path;
 
 		// Set the License
-		$this->license_user = $license_user;
 		$this->license_key = $license_key;
 
 		// Set the Plugin Slug	
@@ -84,11 +77,11 @@ class Update
 		$remote_version = $this->getRemote_version();
 
 		// If a newer version is available, add the update
-		if (version_compare($this->current_version, $remote_version->new_version, '<')) {
+		if (version_compare($this->current_version, $remote_version->version, '<')) {
 			$obj = new \stdClass();
 			$obj->slug = $this->slug;
 			$obj->homepage = $remote_version->homepage;
-			$obj->new_version = $remote_version->new_version;
+			$obj->new_version = $remote_version->version;
 			$obj->url = $remote_version->download_url;
 			$obj->plugin = $this->plugin_slug;
 			$obj->package = $remote_version->download_url;
@@ -123,7 +116,6 @@ class Update
 		$params = array(
 			'body' => array(
 				'action' => 'version',
-				'license_user' => $this->license_user,
 				'license_key' => $this->license_key,
 			),
 		);
@@ -143,7 +135,6 @@ class Update
 		$params = array(
 			'body' => array(
 				'action' => 'info',
-				'license_user' => $this->license_user,
 				'license_key' => $this->license_key,
 			),
 		);
@@ -155,7 +146,7 @@ class Update
 			$res->slug = $remote->slug;
 			$res->author = $remote->author;
 			$res->author_profile = $remote->author_profile;
-			$res->version = $remote->new_version;
+			$res->version = $remote->version;
 			$res->tested = $remote->tested;
 			$res->requires = $remote->requires;
 			$res->requires_php = $remote->requires_php;
@@ -178,26 +169,6 @@ class Update
 			);
 
 			return $res;
-		}
-		return false;
-	}
-
-	/**
-	 * Return the status of the plugin licensing
-	 * @return boolean $remote_license
-	 */
-	public function getRemote_license()
-	{
-		$params = array(
-			'body' => array(
-				'action' => 'license',
-				'license_user' => $this->license_user,
-				'license_key' => $this->license_key,
-			),
-		);
-		$request = wp_remote_post($this->update_path, $params);
-		if (!is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
-			return unserialize($request['body']);
 		}
 		return false;
 	}
