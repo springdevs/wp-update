@@ -68,7 +68,7 @@ class Update
 		$remote_version = $this->getRemote_version();
 
 		// If a newer version is available, add the update
-		if (version_compare($this->current_version, $remote_version->version, '<')) {
+		if ($remote_version && property_exists($remote_version, 'version') && version_compare($this->current_version, $remote_version->version, '<')) {
 			$obj = new \stdClass();
 			$obj->slug = $this->slug;
 			$obj->homepage = $remote_version->homepage;
